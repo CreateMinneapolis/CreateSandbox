@@ -1,4 +1,4 @@
-project(ExampleProject)
+project(Create)
 
 cmake_minimum_required(VERSION 2.8)
 
@@ -13,4 +13,4 @@ endif()
 
 include(${CMAKE_FRAMEWORK_DIR}/project/MainProject.cmake)
 
-add_subdirectory(app)
+add_subdirectory(apps)
