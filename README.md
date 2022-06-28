@@ -42,7 +42,7 @@
 
     ```bash
     # MUST be within project/ directory inside docker image
-    cd /home/user/repo/project
+    cd /home/user/repo
     ./build/drone_sim 8081 apps/drone_sim/web
     ```
     
