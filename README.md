@@ -43,7 +43,7 @@
     ```bash
     # MUST be within project/ directory inside docker image
     cd /home/user/repo
-    ./build/drone_sim 8081 apps/drone_sim/web
+    ./build/bin/DroneSim 8081 apps/drone_sim/web/
     ```
     
 5. Open up Firefox and browse to http://127.0.0.1:8081/
