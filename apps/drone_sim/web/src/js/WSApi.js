@@ -8,7 +8,8 @@ function WSApi() {
 
     this.socket.onmessage = function (msg) {
         var data = JSON.parse(msg.data);
-        if ("id" in data) {
+       
+        if (data.id != undefined) {
             self.callbacks[data.id](data);
         }
         if (self.onmessage) {

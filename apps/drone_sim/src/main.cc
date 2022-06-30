@@ -1,7 +1,6 @@
 /**
 Copyright (c) 2019 Dan Orban
 */
-
 #include <iostream>
 #include <map>
 #include "drone_app.h" 

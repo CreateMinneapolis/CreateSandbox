@@ -1,8 +1,10 @@
 FROM ubuntu:18.04 as env
 
+
 RUN groupdel dialout
 
 ENV DEBIAN_FRONTEND=noninteractive
+
 
 RUN apt-get update && apt-get install -y \
     build-essential \
@@ -17,7 +19,10 @@ RUN apt-get update && apt-get install -y \
     git \
     libomp-dev \
     cmake \
-    wget
+    wget \
+    curl
+
+
 
 ARG USER_ID
 ARG GROUP_ID
@@ -29,7 +34,7 @@ RUN echo ${DEP_DIR}
 ENV SRC_DIR=/${SRC_DIR}
 RUN echo ${SRC_DIR}
 
-RUN addgroup --gid $GROUP_ID user
+RUN addgroup --gid $GROUP_ID user 
 RUN adduser --disabled-password --gecos '' --uid $USER_ID --gid $GROUP_ID user
 
 RUN mkdir -p ${SRC_DIR}
@@ -38,4 +43,6 @@ RUN mkdir -p ${DEP_DIR}
 RUN mkdir -p /home/user
 WORKDIR /home/user/repo
 
-USER user
+#this would have to change when production comes because its very vulnerable
+User user
+
