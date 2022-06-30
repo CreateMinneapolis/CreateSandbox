@@ -43,6 +43,5 @@ RUN mkdir -p ${DEP_DIR}
 RUN mkdir -p /home/user
 WORKDIR /home/user/repo
 
-#this would have to change when production comes because its very vulnerable
 User user
 
