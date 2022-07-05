@@ -4,9 +4,11 @@ import { GLTFLoader } from './src/js/threeJS/GLTFLoader.js';
 
 //lets us talk to our c++ backend. This is from the WSApi file in src/js
 let api = new WSApi();
-
+let entities = {}
+var entityList = [];
+var models = [];
+const group = new THREE.Group();
 //add utils
-var geometry, material, mesh;
 var camera, scene, renderer, controls;
 var container = document.querySelector( '#scene-container' );
 const mixers = [];
@@ -17,9 +19,28 @@ const clock = new THREE.Clock();
 
 var time = 0.0;
 var simSpeed = 1.0;
+let flag = true
 $( document ).ready(function() {
 	init()
 	window.addEventListener( 'resize', onWindowResize );
+	
+	try {
+		api.onmessage = function(msg, data) {
+			
+			if(data.event != null){
+				if(data.event == "AddEntity"){
+					console.log(`Adding entity of type ${data.details.details.type} to the scene`);
+					AddEntity(data.details.details)
+				}
+				if(data.event == "UpdateEntity"){
+					UpdateEntity(data.details);
+				}
+			}
+		}
+	}
+	catch(excetion) {
+		alert(excetion)
+	}
 });
 
 //Init function initalizes the scene and lets it get called
@@ -32,13 +53,13 @@ function init() {
 
 	//Add camera
 	camera = new THREE.PerspectiveCamera( fov, aspect, near, far );
-	camera.position.set( 15, 15, 30 );
+	camera.position.set( 200, 200, 90 );
 	controls = new OrbitControls( camera, container );
 
 	//Add Scene
 	scene = new THREE.Scene();
 	scene.background = new THREE.Color( 'skyblue' );
-	scene.add(new THREE.AxesHelper(5))
+
 
 	//add controls so you can click and drag to move around
 	controls.enableDamping = true
@@ -54,41 +75,118 @@ function init() {
 	light2.position.set( 0, 10, -10 );
 	scene.add( ambientLight, light2 );
 
-	
-	//load first model - move into function later
-	let modelReady = false
-	const animationActions = []
-	let activeAction
-	let lastAction
-	let mixer
-
 	renderer = new THREE.WebGLRenderer( { antialias: true } );
 	renderer.setSize( window.innerWidth, window.innerHeight );
 	document.body.appendChild( renderer.domElement );
 	
-	LoadModel('./src/assets/model/robot.glb', 0, [0,0,0])
-	LoadModel('./src/assets/model/drone.glb', 0, [6,0,0])
+	
+	//this will set the scene with all the commands laid out in scene.json
+	$.getJSON("./scene.json", function(json) {
+		for(let i = 0; i < json.length; i++){
+			if(json[i].command == "AddMesh"){
+				loader.load( json[i].params.mesh, function ( glb ) {
+					console.log(json[i].params.scale)
+					const pos = new THREE.Vector3(json[i].params.position[0], json[i].params.position[1], json[i].params.position[2])
+					const tempScale = new THREE.Vector3(json[i].params.scale[0], json[i].params.scale[1], json[i].params.scale[2])
+					glb.scene.scale.copy(tempScale)
+					glb.scene.position.copy(pos)
+					
+					scene.add(glb.scene)
+				}, undefined, function ( error ) {
+					console.error( error );
+				} );
+			
+			
+				//handle updates for animations
+				renderer.setAnimationLoop( () => {
+					update();
+					render();
+				});
+			}else {
+				api.sendCommand(json[i].command, {entityId: i, type: json[i].params.type, name: json[i].params.name, position: json[i].params.position});
+			}
+			
+		}
+	})
+
+	
 }
 
-function LoadModel(path, id, position){
-	loader.load( path, function ( glb ) {
-		
-		glb.scene.position.x += position[0]
-		glb.scene.position.y += position[1]
-		glb.scene.position.z += position[2]
-		const mixer = new THREE.AnimationMixer(glb.scene)
-		
-		const animation = glb.animations[0];
-		console.log(animation)
-		mixers.push({id: id, mixer: mixer, start: 0, duration: animation.duration})
-		var action = mixer.clipAction(animation);
-		action.play();
-		scene.add(glb.scene)
+function AddEntity(details) {
+	const position = [details.position[0], details.position[1], details.position[2]];
+	const id = details.id;
+	let mesh;
+	if(mesh in details){
+		mesh = mesh
+	} else {
+		if(details.type == "drone"){
+			mesh = './src/assets/model/drone.glb';
+		}
+	}
+	LoadModel(mesh, id, position, [0,0,0]);
+}
 
-	}, undefined, function ( error ) {
-	
-		console.error( error );
+function UpdateEntity(details){
+	if(entities[details.id] != undefined){
+		console.log(details)
+		var model = entities[details.id];
+
+		model.position.x = details.pos[0];
+		model.position.y = details.pos[1];
+		model.position.z = details.pos[2];
+
+		model.position.x = model.position.x/14.2;
+		model.position.y = model.position.y/20.0 - 13.0;
+		model.position.z = model.position.z/14.2;
 		
+		var dir = new THREE.Vector3(details.dir[0], details.dir[1], details.dir[2]);
+		var pos = new THREE.Vector3();
+        pos.addVectors(dir, model.position);
+
+		var vector = new THREE.Vector3( 0, 1, 0 );
+		vector = model.worldToLocal(vector);
+
+		var adjustedDirVector = model.localToWorld(new THREE.Vector3(0,0,0)).add(dir);
+        model.lookAt(adjustedDirVector);
+	}
+
+
+}
+function LoadModel(mesh, id, position, scale){
+	
+	loader.load( mesh, function ( glb ) {
+		const model = glb.scene.children[0]
+		position[0] = position[0]/14.2;
+		position[1] = position[1]/20.0 - 13.0;
+		position[2] = position[2]/14.2;
+		const pos = new THREE.Vector3(position[0], position[1], position[2])
+		const tempScale = new THREE.Vector3(scale[0], scale[1], scale[2])
+		glb.scene.scale.copy(tempScale)
+		// add animation if it exitis. Right now it only adds the
+		// first one, will have to do something else for that later
+		//model.scale.copy(tempScale);
+	  
+		const animation = glb.animations[0];
+		console.log(animation);
+		
+		if (!(typeof animation === "undefined")) {
+		  const mixer = new THREE.AnimationMixer( model );
+		  mixers.push( {id: id, mixer: mixer, start: 0, duration: glb.duration} );
+		var action = mixer.clipAction(animation);
+			action.play();
+		}
+	  
+		
+		
+		group.add(model);
+		group.position.copy(pos);
+
+		models.push(group);
+		scene.add( group );
+		entities[id] = group;
+		entityList.push(id);
+	}, undefined, function ( error ) {
+		console.error( error );
 	} );
 
 
@@ -97,6 +195,8 @@ function LoadModel(path, id, position){
 		update();
 		render();
 	});
+
+	
 }
 
 function render() {
@@ -124,7 +224,7 @@ function update() {
 	}
 	//This is where we can send the update command that our c++ backend will talk to
 	//comments out now cause its annoying
-	//api.sendCommand("Update", { simSpeed: simSpeed });
+	api.sendCommand("update", { simSpeed: simSpeed });
 }
 
 function onWindowResize() {
