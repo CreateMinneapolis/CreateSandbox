@@ -7,7 +7,7 @@ Drone::Drone(JsonObject obj) : details(obj) {
     JsonArray pos = obj["position"];
 
     position = Vector3(pos[0],pos[1],pos[2]);
-    velocity = Vector3(200,200,200);
+    velocity = Vector3(1,1,1);
 
     droneTime = 0.0;
     
@@ -26,8 +26,8 @@ void Drone::SetVelocity(double* velocity) {
 
 void Drone::Update(double dt) {
     droneTime += dt;
-    position[0] = 0 + 1000 * std::cos(droneTime);
-    position[2] = 0 + 1000 * std::sin(droneTime);
+    position[0] = 0.5 * std::cos(droneTime);
+    position[2] = 0.5 * std::sin(droneTime);
 }
 
 void Drone::Rotate(double angle) {

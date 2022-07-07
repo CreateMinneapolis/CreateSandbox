@@ -49,11 +49,11 @@ function init() {
 	const fov = 35; // fov = Field Of View
 	const aspect = container.clientWidth / container.clientHeight;
 	const near = 0.1;
-	const far = 1000;
+	const far = 5000;
 
 	//Add camera
 	camera = new THREE.PerspectiveCamera( fov, aspect, near, far );
-	camera.position.set( 200, 200, 90 );
+	camera.position.set( 7.3, 7, 5 );
 	controls = new OrbitControls( camera, container );
 
 	//Add Scene
@@ -68,14 +68,14 @@ function init() {
 	//Set light sources
 	const ambientLight = new THREE.AmbientLight( 0xffffff, 1 );
 	scene.add( ambientLight );
-	const light = new THREE.DirectionalLight( 0xffffff, 1 );
+	const light = new THREE.DirectionalLight( 0xffffff, 0.5 );
 	light.position.set( 10, 10, 10 );
 	scene.add( ambientLight, light );
-	const light2 = new THREE.DirectionalLight( 0xffffff, 1 );
+	const light2 = new THREE.DirectionalLight( 0xffffff, 0.5 );
 	light2.position.set( 0, 10, -10 );
 	scene.add( ambientLight, light2 );
 
-	renderer = new THREE.WebGLRenderer( { antialias: true } );
+	renderer = new THREE.WebGLRenderer( { antialias: true, logarithmicDepthBuffer: true, } );
 	renderer.setSize( window.innerWidth, window.innerHeight );
 	document.body.appendChild( renderer.domElement );
 	
@@ -85,7 +85,6 @@ function init() {
 		for(let i = 0; i < json.length; i++){
 			if(json[i].command == "AddMesh"){
 				loader.load( json[i].params.mesh, function ( glb ) {
-					console.log(json[i].params.scale)
 					const pos = new THREE.Vector3(json[i].params.position[0], json[i].params.position[1], json[i].params.position[2])
 					const tempScale = new THREE.Vector3(json[i].params.scale[0], json[i].params.scale[1], json[i].params.scale[2])
 					glb.scene.scale.copy(tempScale)
@@ -103,71 +102,57 @@ function init() {
 					render();
 				});
 			}else {
-				api.sendCommand(json[i].command, {entityId: i, type: json[i].params.type, name: json[i].params.name, position: json[i].params.position});
+				api.sendCommand(json[i].command, {entityId: i, type: json[i].params.type, name: json[i].params.name, mesh: json[i].params.mesh, position: json[i].params.position});
 			}
 			
 		}
 	})
-
-	
 }
 
 function AddEntity(details) {
 	const position = [details.position[0], details.position[1], details.position[2]];
 	const id = details.id;
-	let mesh;
-	if(mesh in details){
-		mesh = mesh
-	} else {
-		if(details.type == "drone"){
-			mesh = './src/assets/model/drone.glb';
-		}
-	}
+	let mesh = details.mesh;
+
+
 	LoadModel(mesh, id, position, [0,0,0]);
 }
 
 function UpdateEntity(details){
 	if(entities[details.id] != undefined){
-		console.log(details)
-		var model = entities[details.id];
+		let model = entities[details.id];
 
 		model.position.x = details.pos[0];
 		model.position.y = details.pos[1];
 		model.position.z = details.pos[2];
 
-		model.position.x = model.position.x/14.2;
-		model.position.y = model.position.y/20.0 - 13.0;
-		model.position.z = model.position.z/14.2;
+		model.position.x = model.position.x
+		model.position.y = model.position.y
+		model.position.z = model.position.z
 		
-		var dir = new THREE.Vector3(details.dir[0], details.dir[1], details.dir[2]);
-		var pos = new THREE.Vector3();
+		const dir = new THREE.Vector3(details.dir[0], details.dir[1], details.dir[2]);
+		const pos = new THREE.Vector3();
         pos.addVectors(dir, model.position);
 
-		var vector = new THREE.Vector3( 0, 1, 0 );
+		let vector = new THREE.Vector3( 0, 1, 0 );
 		vector = model.worldToLocal(vector);
 
-		var adjustedDirVector = model.localToWorld(new THREE.Vector3(0,0,0)).add(dir);
+		const adjustedDirVector = model.localToWorld(new THREE.Vector3(0,0,0)).add(dir);
         model.lookAt(adjustedDirVector);
+
 	}
-
-
 }
 function LoadModel(mesh, id, position, scale){
-	
 	loader.load( mesh, function ( glb ) {
 		const model = glb.scene.children[0]
-		position[0] = position[0]/14.2;
-		position[1] = position[1]/20.0 - 13.0;
-		position[2] = position[2]/14.2;
+		position[0] = position[0]
+		position[1] = position[1]
+		position[2] = position[2]
 		const pos = new THREE.Vector3(position[0], position[1], position[2])
 		const tempScale = new THREE.Vector3(scale[0], scale[1], scale[2])
 		glb.scene.scale.copy(tempScale)
-		// add animation if it exitis. Right now it only adds the
-		// first one, will have to do something else for that later
-		//model.scale.copy(tempScale);
-	  
+
 		const animation = glb.animations[0];
-		console.log(animation);
 		
 		if (!(typeof animation === "undefined")) {
 		  const mixer = new THREE.AnimationMixer( model );
@@ -175,9 +160,7 @@ function LoadModel(mesh, id, position, scale){
 		var action = mixer.clipAction(animation);
 			action.play();
 		}
-	  
-		
-		
+
 		group.add(model);
 		group.position.copy(pos);
 
@@ -195,8 +178,6 @@ function LoadModel(mesh, id, position, scale){
 		update();
 		render();
 	});
-
-	
 }
 
 function render() {
@@ -237,3 +218,4 @@ function onWindowResize() {
 	// update the size of the renderer AND the canvas
 	renderer.setSize(window.innerWidth, window.innerHeight);
   }
+

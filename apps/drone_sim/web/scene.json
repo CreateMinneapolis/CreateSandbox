@@ -4,7 +4,7 @@
       	"params": {
       	    "type": "drone",
             "name": "Drone1",
-      	    "mesh": "./src/assets/model/drone.glb",
+      	    "mesh": "./src/assets/model/fixed_drone_3.glb",
       	    "position": [0,0,0],
       	    "scale": [1, 1, 1],
       	    "rotation": [0, 0, 0, 0],
@@ -19,14 +19,18 @@
     {
         "command": "AddMesh",
       	"params": {
-      	    "mesh": "./src/assets/model/plane.glb",
-      	    "position": [0,-20,0],
-      	    "scale": [20, 1, 20],
+      	    "mesh": "./src/assets/model/scene5.glb",
+      	    "position": [0,2,0],
+      	    "scale": [1, 1, 1],
       	    "rotation": [0, 0, 0, 0],
             "direction": [0,0,0],
             "speed": 0.0,
             "radius": 0.0,
             "offset": [0, 0.0, 0]
     	  }
+    
     }
+    
+    
+
 ]
