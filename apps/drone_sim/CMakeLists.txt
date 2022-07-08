@@ -4,15 +4,20 @@ include(${CMAKE_FRAMEWORK_DIR}/project/project.cmake)
 
 # --------------------- Source -----------------------
 
+file(GLOB src
+     "src/*.cc"
+)
+
+file(GLOB inc
+     "include/*.h"
+)
+
 set (SOURCEFILES
-	src/main.cc
-	src/drone_app.cc
-	src/drone.cc
+	${src}
 )
 
 set (HEADERFILES
-	src/drone_app.h
-	src/drone.h
+	${inc}
 )
 
 # --------------------- Dependencies -----------------------
