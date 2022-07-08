@@ -110,7 +110,9 @@ function init() {
 }
 
 function AddEntity(details) {
+	
 	const position = [details.position[0], details.position[1], details.position[2]];
+
 	const id = details.id;
 	let mesh = details.mesh;
 
@@ -145,9 +147,9 @@ function UpdateEntity(details){
 function LoadModel(mesh, id, position, scale){
 	loader.load( mesh, function ( glb ) {
 		const model = glb.scene.children[0]
-		position[0] = position[0]
-		position[1] = position[1]
-		position[2] = position[2]
+		model.position.x = position[0];
+		model.position.y = position[1];
+		model.position.z = position[2];
 		const pos = new THREE.Vector3(position[0], position[1], position[2])
 		const tempScale = new THREE.Vector3(scale[0], scale[1], scale[2])
 		glb.scene.scale.copy(tempScale)
