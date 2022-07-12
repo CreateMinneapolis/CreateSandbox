@@ -1,4 +1,4 @@
-project (DroneSim)
+project (entitysystem)
 
 include(${CMAKE_FRAMEWORK_DIR}/project/project.cmake)
 
@@ -42,6 +42,8 @@ set(ALL_LIBS ${ALL_LIBS} websockets crypto ssl z)
 
 include(${external_dir}/CPP11/CPP11.cmake)
 useCPP11()
+
+
 
 # --------------------- Executable -----------------------
 

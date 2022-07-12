@@ -3,7 +3,7 @@
 
 #include "controller.h"
 #include "composite_factory.h"
-
+#include "./../utils/json.h"
 
 // Web application for displaying a drone
 class SimulationModel {

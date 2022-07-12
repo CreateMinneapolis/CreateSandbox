@@ -1,4 +1,4 @@
-project(Create)
+project(CreateSandbox)
 
 cmake_minimum_required(VERSION 2.8)
 
@@ -13,4 +13,9 @@ endif()
 
 include(${CMAKE_FRAMEWORK_DIR}/project/MainProject.cmake)
 
-add_subdirectory(apps)
+option(WITH_APPS "If enabled, includes apps in the build." ON)
+if(${WITH_APPS})
+	#add_subdirectory(app)
+endif()
+add_subdirectory(apps/web_service)
+add_subdirectory(libs)
