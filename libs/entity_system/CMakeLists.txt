@@ -1,4 +1,4 @@
-project (entitysystem)
+project (EntitySystem)
 
 include(${CMAKE_FRAMEWORK_DIR}/project/project.cmake)
 
