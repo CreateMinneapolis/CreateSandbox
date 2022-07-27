@@ -45,7 +45,7 @@ useCPP11()
 
 
 
-# --------------------- Executable -----------------------
+# --------------------- Library -----------------------
 
-addStandardExecutable()
+addStandardLibrary()
 
