@@ -5,21 +5,21 @@ import { GLTFLoader } from './src/js/threeJS/GLTFLoader.js';
 //lets us talk to our c++ backend. This is from the WSApi file in src/js
 let api = new WSApi();
 let entities = {}
-var entityList = [];
-var models = [];
+let entityList = [];
+let models = [];
 const group = new THREE.Group();
 //add utils
-var camera, scene, renderer, controls;
-var container = document.querySelector( '#scene-container' );
+let camera, renderer;
+const scene =  new THREE.Scene();
+let container = document.querySelector( '#scene-container' );
 const mixers = [];
 // const scene = new THREE.Scene()
 const loader = new GLTFLoader();
 const clock = new THREE.Clock();
 // const renderer = new THREE.WebGLRenderer()
 
-var time = 0.0;
-var simSpeed = 1.0;
-let flag = true
+let time = 0.0;
+let simSpeed = 1.0;
 $( document ).ready(function() {
 	init()
 	window.addEventListener( 'resize', onWindowResize );
@@ -53,17 +53,16 @@ function init() {
 
 	//Add camera
 	camera = new THREE.PerspectiveCamera( fov, aspect, near, far );
-	camera.position.set( 7.3, 7, 5 );
-	controls = new OrbitControls( camera, container );
+	camera.position.set( 9, 2, -4 );
+	// controls = new OrbitControls( camera, container );
 
 	//Add Scene
-	scene = new THREE.Scene();
 	scene.background = new THREE.Color( 'skyblue' );
 
 
 	//add controls so you can click and drag to move around
-	controls.enableDamping = true
-	controls.target.set(0, 1, 0)
+	// controls.enableDamping = true
+	// controls.target.set(0, 1, 0)
 
 	//Set light sources
 	const ambientLight = new THREE.AmbientLight( 0xffffff, 1 );
@@ -79,7 +78,6 @@ function init() {
 	renderer.setSize( window.innerWidth, window.innerHeight );
 	document.body.appendChild( renderer.domElement );
 	
-	
 	//this will set the scene with all the commands laid out in scene.json
 	$.getJSON("./scene.json", function(json) {
 		for(let i = 0; i < json.length; i++){
@@ -94,15 +92,13 @@ function init() {
 				}, undefined, function ( error ) {
 					console.error( error );
 				} );
-			
-			
 				//handle updates for animations
 				renderer.setAnimationLoop( () => {
 					update();
 					render();
 				});
 			}else {
-				api.sendCommand(json[i].command, {entityId: i, type: json[i].params.type, name: json[i].params.name, mesh: json[i].params.mesh, position: json[i].params.position, velocity: json[i].params.velocity});
+				api.sendCommand(json[i].command, {entityId: i, type: json[i].params.type, name: json[i].params.name, mesh: json[i].params.mesh, position: json[i].params.position});
 			}
 			
 		}
@@ -110,13 +106,9 @@ function init() {
 }
 
 function AddEntity(details) {
-	
 	const position = [details.position[0], details.position[1], details.position[2]];
-
 	const id = details.id;
 	let mesh = details.mesh;
-
-
 	LoadModel(mesh, id, position, [0,0,0]);
 }
 
@@ -127,14 +119,8 @@ function UpdateEntity(details){
 		model.position.x = details.pos[0];
 		model.position.y = details.pos[1];
 		model.position.z = details.pos[2];
-
-		model.position.x = model.position.x
-		model.position.y = model.position.y
-		model.position.z = model.position.z
 		
 		const dir = new THREE.Vector3(details.dir[0], details.dir[1], details.dir[2]);
-		const pos = new THREE.Vector3();
-        pos.addVectors(dir, model.position);
 
 		let vector = new THREE.Vector3( 0, 1, 0 );
 		vector = model.worldToLocal(vector);
@@ -142,18 +128,17 @@ function UpdateEntity(details){
 		const adjustedDirVector = model.localToWorld(new THREE.Vector3(0,0,0)).add(dir);
         model.lookAt(adjustedDirVector);
 
+		camera.lookAt(model.position)
 	}
 }
 function LoadModel(mesh, id, position, scale){
 	loader.load( mesh, function ( glb ) {
 		const model = glb.scene.children[0]
-		model.position.x = position[0];
-		model.position.y = position[1];
-		model.position.z = position[2];
+
 		const pos = new THREE.Vector3(position[0], position[1], position[2])
 		const tempScale = new THREE.Vector3(scale[0], scale[1], scale[2])
 		glb.scene.scale.copy(tempScale)
-
+		model.position.copy(pos)
 		const animation = glb.animations[0];
 		
 		if (!(typeof animation === "undefined")) {
@@ -207,7 +192,8 @@ function update() {
 	}
 	//This is where we can send the update command that our c++ backend will talk to
 	//comments out now cause its annoying
-	api.sendCommand("update", { simSpeed: simSpeed });
+	api.sendCommand("update", { simSpeed: simSpeed })
+
 }
 
 function onWindowResize() {
