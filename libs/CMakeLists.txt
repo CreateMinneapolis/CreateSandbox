@@ -1,2 +1,2 @@
-add_subdirectory(entity_system)
 add_subdirectory(physics_system)
+add_subdirectory(entity_system)
