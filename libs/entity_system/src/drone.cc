@@ -24,10 +24,14 @@ void Drone::SetVelocity(double* velocity) {
     // }
 }
 
+void Drone::SetPosition(double* newPosition){
+    position[0] = newPosition[0];
+    position[1] = newPosition[1];
+    position[2] = newPosition[2];
+}
 void Drone::Update(double dt) {
     droneTime += dt;
-    position[0] = 0.5 * std::cos(droneTime);
-    position[2] = 0.5 * std::sin(droneTime);
+   
 }
 
 void Drone::Rotate(double angle) {
