@@ -68,9 +68,6 @@ public:
         positionVector[2] = 0.5 * std::sin(simulationTime);
     }
 
-
-
-
 private:
     //This will map the name of the entity to first and last index of where it would be
     //in the position or velocity vector
@@ -78,9 +75,15 @@ private:
     double simulationTime = 0;
     //length not the last index
     int vectorLength = 0;
-    Vec* positionVector = (Vec*) malloc(sizeof(Vec)*3); /* position Vector */
-    Vec* velocityVector = (Vec*) malloc(sizeof(Vec)*3);; /* velocity Vector */
+    Vec* positionVector = (Vec*) malloc(sizeof(Vec)*30); /* position Vector */
+    Vec* velocityVector = (Vec*) malloc(sizeof(Vec)*30);; /* velocity Vector */
+    Vec* forceVector = (Vec*) malloc(sizeof(Vec)*30);; /* force Vector */
     Vec forceAccumulator; /* force accumulator */
+
+    //Note, because these vectors are only malloc to 30, that means the system right now only 
+    //Supports 10 entities. Later I want to make those vectors dynamic and be able to resize when
+    // an entity is added and it goes over what ever limit we put at it first so it can support
+    // as many entities that we want
 };
 
 
