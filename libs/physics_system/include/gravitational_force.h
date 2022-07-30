@@ -3,11 +3,20 @@
 #include <iostream>
 #include "./interfaces/IPhysicsSystem.h"
 #include "./force.h"
-// Web application for displaying a drone
+
+
+/**
+ * @brief Gravity!
+ */
 class GravitationalForce : public Force {
 public:
-    // Default constructor
+    /**
+     * @brief Default constructor.
+     */
     GravitationalForce();
+    /**
+     * @brief Adds Force
+     */
     void AddForces();
 
 

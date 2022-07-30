@@ -1,8 +1,4 @@
 #include "./../include/vector3.h"
-
-/**
-   * @brief Default constructor.
-   */
   Vector3::Vector3() { 
       x = 0.0;
       y = 0.0;

@@ -3,9 +3,10 @@
 
 #include "./../../utils/json.h"
 
-//--------------------  Controller Interface ----------------------------
-
-/// Abstract controller class used in the Transit Service.  Uses the Model View Controller Pattern
+//--------------------  Entity Interface ----------------------------
+/**
+ * @brief  Abstract entity class. Defines behavior for all entities
+ */
 class IEntity {
 public:
     IEntity() {

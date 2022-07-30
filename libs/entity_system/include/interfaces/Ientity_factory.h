@@ -4,7 +4,10 @@
 #include "./../../utils/json.h"
 #include "entity.h"
 
-
+//--------------------  Entity Factory Interface ----------------------------
+/**
+ * @brief Abstract class for the Entity Factories
+ */
 class IEntityFactory {
   public:
     virtual ~IEntityFactory() {}
