@@ -102,7 +102,7 @@ function init() {
 					render();
 				});
 			}else {
-				api.sendCommand(json[i].command, {entityId: i, type: json[i].params.type, name: json[i].params.name, mesh: json[i].params.mesh, position: json[i].params.position});
+				api.sendCommand(json[i].command, {entityId: i, type: json[i].params.type, name: json[i].params.name, mesh: json[i].params.mesh, position: json[i].params.position, velocity: json[i].params.velocity});
 			}
 			
 		}

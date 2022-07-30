@@ -17,6 +17,7 @@ public:
     virtual int GetId() const { return id; }
     virtual double GetPosition(int index) const = 0;
     virtual double GetDirection(int index) const = 0;
+    virtual void SetPosition(double* position) = 0;
     virtual JsonObject GetDetails() const = 0;
     virtual void Update(double dt) {}
 private:

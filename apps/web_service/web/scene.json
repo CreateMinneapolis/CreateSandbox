@@ -6,6 +6,7 @@
             "name": "Drone1",
       	    "mesh": "./src/assets/model/fixed_drone_3.glb",
       	    "position": [0,0.5,0],
+            "velocity": [1, 1, 1],
       	    "scale": [1, 1, 1],
       	    "rotation": [0, 0, 0, 0],
             "direction": [1,0,0],

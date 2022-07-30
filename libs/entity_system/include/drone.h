@@ -24,6 +24,8 @@ public:
     void Update(double dt);
     // Sets the drone's velocity
     void SetVelocity(double* velocity);
+    // Sets the drones position
+    void SetPosition(double* position);
     // Rotates a drone
     void Rotate(double angle);
 
