@@ -4,7 +4,7 @@
 #include "controller.h"
 #include "composite_factory.h"
 #include "./../utils/json.h"
-#include "./../physics_system/include/physics_system.h"
+#include "physics_system.h"
 #include <stdio.h>
 #include <stdlib.h> 
 // Web application for displaying a drone

@@ -3,6 +3,8 @@
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h> 
+#include <vector>
+#include <cmath>
 #include <map>
 // Web application for displaying a drone
 class PhysicsSystem  {
@@ -68,6 +70,7 @@ public:
         positionVector[2] = 0.5 * std::sin(simulationTime);
     }
 
+    void Test();
 private:
     //This will map the name of the entity to first and last index of where it would be
     //in the position or velocity vector

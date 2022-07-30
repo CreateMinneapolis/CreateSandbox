@@ -37,7 +37,7 @@ void SimulationModel::Update(double dt) {
    
     SetTime(dt);
 
-
+    Test();
     CircleForce();
 
 

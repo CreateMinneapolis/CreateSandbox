@@ -32,6 +32,7 @@ add_external(CppWebServerLib
 )
 set(DEP_INCLUDES ${DEP_INCLUDES} ${external_dir}/CppWebServerLib/src/src)
 set(DEP_INCLUDES ${DEP_INCLUDES} 
+	${CMAKE_CURRENT_SOURCE_DIR}/../../libs/physics_system/include
 	${external_dir}/CppWebServerLib/src/cmake/framework/external/WebSockets/build/install/include
 
 )
@@ -40,6 +41,10 @@ set(DEP_LINK_DIRS ${DEP_LINK_DIRS}
   ${external_dir}/CppWebServerLib/src/cmake/framework/external/WebSockets/build/install/lib
   
 )
+
+set(DEP_INCLUDES ${DEP_INCLUDES} PhysicsSystem)
+set(DEP_LIBS ${DEP_LIBS} PhysicsSystem)
+
 set(DEP_INCLUDES ${DEP_INCLUDES} 
 	${external_dir}/picojson/src
 )
