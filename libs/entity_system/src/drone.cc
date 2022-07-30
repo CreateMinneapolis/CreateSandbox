@@ -20,10 +20,10 @@ void Drone::SetVelocity(double* velocity) {
     }
 }
 
-void Drone::SetPosition(double* newPosition){
-    position[0] = newPosition[0];
-    position[1] = newPosition[1];
-    position[2] = newPosition[2];
+void Drone::SetPosition(double* position){
+        for(int i = 0; i < 3; i++){
+        this->position[i] = position[i];
+    }
 }
 void Drone::Update(double dt) {
    return;
