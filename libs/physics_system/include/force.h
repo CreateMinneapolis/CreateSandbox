@@ -1,11 +1,14 @@
 #ifndef FORCE_H
 #define FORCE_H
 #include <iostream>
-#include "./interfaces/IPhysicsSystem.h"
-// Web application for displaying a drone
-class Force{
+/**
+ * @brief Parent class for all forces
+ */
+class Force {
 public:
-    // Default constructor
+    /**
+     * @brief Adds Forces to the system
+     */
     void AddForces();
 
 

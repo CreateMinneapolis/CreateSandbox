@@ -35,11 +35,8 @@ void SimulationModel::Update(double dt) {
     //std::cout << "Update: " << dt << std::endl;
     // Call controller to update changed entities
    
-    SetTime(dt);
-
-    Test();
+    UpdateSimulationTime(dt);
     CircleForce();
-
 
     for (int i = 0; i < entities.size(); i++) {
       static_cast<IEntity*>(entities[i])->Update(dt);
@@ -47,6 +44,7 @@ void SimulationModel::Update(double dt) {
       entities[i]->SetPosition(pos);
       //std::cout << pos[0] << " " << pos[1] << " " << pos[2] << std::endl;
       controller.UpdateEntity(*entities[i]);
+      free(pos);
     }
    
    
