@@ -12,19 +12,15 @@
  */
 class PhysicsSystem  {
 public:
-
     typedef double Vec;
-
     /**
      * @brief Calculates the derivative of the physics system
      */
     int CalculateDerivative();
     /**
      * @brief Adds a new force
-     * @return 1 = success 0 = fail
      */
-    int AddForce();
-
+    void AddForce();
     /**
      * @brief Takes an entity from the EntitySystem and adds it to the physics system
      * @param[in] entityName Name of the entity that can then be used in the map
@@ -38,7 +34,6 @@ public:
      * @return Vec* of given entities position
      */
     Vec* GetPositionVectorOfEntity(std::string entityName);
-
     /**
      * @return returns position vector
      */
@@ -51,7 +46,6 @@ public:
      * @return returns Force Accumulator vector
      */
     Vec GetForceAccumulator();
-
     /**
      * @brief takes in delta time and updates the simulation time
      */

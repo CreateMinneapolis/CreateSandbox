@@ -4,7 +4,7 @@
 /**
  * @brief Parent class for all forces
  */
-class Force{
+class Force {
 public:
     /**
      * @brief Adds Forces to the system
