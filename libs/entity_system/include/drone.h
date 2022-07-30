@@ -58,17 +58,17 @@ public:
 
 
 private:
-/**
- * @brief Details of the drone entity from when it was first initalized like name, inital postion, initial velocity, and id
- */
+    /**
+     * @brief Details of the drone entity from when it was first initalized like name, inital postion, initial velocity, and id
+     */
     JsonObject details;
     /**
- * @brief Drones position
- */
+     * @brief Drones position
+     */
     Vector3 position;
     /**
- * @brief Drones velocity
- */
+     * @brief Drones velocity
+     */
     Vector3 velocity;
 
 };
